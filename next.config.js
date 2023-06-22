@@ -5,8 +5,11 @@ const nextConfig = {
       {
         hostname: 'source.unsplash.com',
       },
+      {
+        hostname: 'm.media-amazon.com',
+      },
     ],
-  }
+  },
 }
 
 module.exports = nextConfig

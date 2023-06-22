@@ -1,10 +1,23 @@
 // import axios, { AxiosError } from 'axios'
+import { apiClient } from '@/lib/axiosConfig'
 import Head from 'next/head'
+import Image from 'next/image'
 // import Image from 'next/image'
 import Link from 'next/link'
 
+type BookTypes = {
+  id: number
+  title: string
+  author: string
+  abstract: string
+  image: string
+  users: number[]
+  comments: number[]
+}
+
 export default async function Books() {
-  // const data = await getData()
+  const data = await getData()
+
   return (
     <>
       <Head>
@@ -16,14 +29,14 @@ export default async function Books() {
         </h1>
 
         <section className="mt-8 flex flex-wrap gap-8">
-          {Array.from(Array(24).keys()).map((item) => {
+          {data?.map((item) => {
             return (
               <Link
-                href={`/books/${item}/`}
+                href={`/books/${item.id}/`}
                 className="relative h-[226px] w-[148px] cursor-pointer bg-[#D9D9D9]"
-                key={item}
+                key={item.id}
               >
-                {/* <Image src={data.image_url} alt="" fill /> */}
+                <Image src={item.image} alt="" fill />
               </Link>
             )
           })}
@@ -39,14 +52,12 @@ export default async function Books() {
 //   })
 // }
 
-// async function getData() {
-//   try {
-//     await later()
-//     const response = await axios.get('http://localhost:3000/api/books/1')
-//     return response.data
-//   } catch (error) {
-//     if (error instanceof AxiosError) {
-//       // console.log(error.response.data)
-//     }
-//   }
-// }
+async function getData(): Promise<BookTypes[] | null> {
+  try {
+    // await later()
+    const response = await apiClient.get('/books')
+    return response.data
+  } catch (error) {
+    return null
+  }
+}
